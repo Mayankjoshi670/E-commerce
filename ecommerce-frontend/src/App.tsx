@@ -2,6 +2,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy , Suspense } from 'react';
 import Loader from './components/loading'
+import Headers from './components/headers';
 // import Home from './pages/home';
 // import Cart from './pages/cart';
 // import Search from './pages/search';
@@ -36,6 +37,7 @@ const TransactionManagement = lazy(
 function App() {
   return (
     <BrowserRouter>
+        <Headers/>
     <Suspense fallback={<Loader/>}>
       <Routes>
         <Route path="/" element={<Home />} />
