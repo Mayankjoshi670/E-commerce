@@ -10,7 +10,7 @@ const Home = () => {
       <Link to="/search" className="findmore">More</Link>
     </h1>
     <main>
-      <ProductCard productId="32323swd" name="phone" photo="https://m.media-amazon.com/images/I/61RJn0ofUsL._AC_SX342_.jpg"  price={9999} stock={10} handler={addToCarthandler} />
+      <ProductCard  productId="32323swd" name="phone" photo="https://m.media-amazon.com/images/I/61RJn0ofUsL._AC_SX342_.jpg"  price={9999} stock={10} handler={addToCarthandler} />
       {/* productId, name, photo, price, stock  , handler */}
     </main>
     </div>
