@@ -4,7 +4,7 @@ import { VscError } from "react-icons/vsc";
  
  const cartItems = {
   productId : "asas" , 
-   photo : asas , 
+   photo : "https://m.media-amazon.com/images/I/61RJn0ofUsL._AC_SX342_.jpg" , 
    name : "mac Book" , 
    price : 65468 , 
    quantity : 4 , 
@@ -33,10 +33,10 @@ const Cart = () => {
   return (
     <div className='cart'>
       <main>
-        {
-          cartItems.map(i=><CartItem )/>)
+        {/* {
+          cartItems.map((i,idx) =>(<CartItem key = {idx} />))
 
-        }
+        } */}
       </main>
     <aside>
     <p>Subtotal :${subtotal}</p>
