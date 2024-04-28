@@ -19,3 +19,16 @@ in models folder we write schemas
 
  in utils folder we have 
  all feature  we need to use again and again (let say we need to find average which takes array and return average we make a util of it )
+
+
+ in src > utils >feature.ts  we create this file to connect to databse 
+ tsc --w  // npm start watch mode is use to build automatically ts files to js files 
+ and run your js file with nodemon  npm run dev 
+
+src-> 
+ middleware :) middleware 
+ models :) all schemas are defined in models eg user schema , product schema , coupen etc
+ routes :) app.get("/",(req , res)=>{})
+ controllers :) we write all (rq, res) wala work heare other wasie code gone out of 100 lines => result => now route will be app.get("/",controller1)
+ types :) typescript ke types 
+ utils :) database
