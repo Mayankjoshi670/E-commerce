@@ -27,8 +27,11 @@ in models folder we write schemas
 
 src-> 
  middleware :) middleware 
- models :) all schemas are defined in models eg user schema , product schema , coupen etc
+ models :) all schemas are defined in models eg user schema , product schema , coupen etc.
  routes :) app.get("/",(req , res)=>{})
  controllers :) we write all (rq, res) wala work heare other wasie code gone out of 100 lines => result => now route will be app.get("/",controller1)
  types :) typescript ke types 
- utils :) database
+ utils :) database 
+
+
+ we have to write try catch block again and again we need to costomize them at first we have create ErrorHandler class why gives error as per our choise but we need to optmixe that code so we will use our tryCatch block 

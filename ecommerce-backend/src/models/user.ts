@@ -12,8 +12,9 @@ interface IUser extends Document {
     dob: Date ; 
     createdAt: Date;
     updatedAt: Date;
-    age : Number; 
 
+    age : Number; 
+//  age is virtual attribute 
 }
 
 const schema = new mongoose.Schema({
