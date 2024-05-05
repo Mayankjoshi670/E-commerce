@@ -35,3 +35,5 @@ src->
 
 
  we have to write try catch block again and again we need to costomize them at first we have create ErrorHandler class why gives error as per our choise but we need to optmixe that code so we will use our tryCatch block 
+
+ installed Multer new library :Multer is a Node.js middleware used for handling multipart/form-data, which is primarily used for uploading files. It is commonly used in web applications where users need to upload files such as images, documents, or videos.
