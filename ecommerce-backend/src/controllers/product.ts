@@ -5,7 +5,8 @@ import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/util-class.js";
 import { rm } from "fs";
 
-export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
+// export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
+    export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: any, next: NextFunction) => {
     const { name, price, stock, category } = req.body;
     const photo = req.file;
     if(!photo)return next(new ErrorHandler("please Add Photo", 400));
@@ -42,6 +43,22 @@ export const getLatestProducts = TryCatch(async (req:Request, res: Response, nex
     });
 });
 
+export const getAllCategories = TryCatch(async (req , res , next)=>{
+    const categories = await Product.distinct("category") ; 
+    return res.status(200).json({
+        sucess : true , 
+       categories
+    })
+})
+
+
+export const getAdminProducts = TryCatch(async(req , res , next)=>{
+    const products = await Product.find({}) ; 
+    return res.status(200).json({
+        sucess : true , 
+        products
+    })
+})
 
 
 

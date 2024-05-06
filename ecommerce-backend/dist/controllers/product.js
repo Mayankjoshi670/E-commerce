@@ -2,6 +2,7 @@ import { TryCatch } from "../middlewares/error.js";
 import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/util-class.js";
 import { rm } from "fs";
+// export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
 export const newProduct = TryCatch(async (req, res, next) => {
     const { name, price, stock, category } = req.body;
     const photo = req.file;
@@ -31,6 +32,20 @@ export const getLatestProducts = TryCatch(async (req, res, next) => {
     const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
     return res.status(200).json({
         success: true,
+        products
+    });
+});
+export const getAllCategories = TryCatch(async (req, res, next) => {
+    const categories = await Product.distinct("category");
+    return res.status(200).json({
+        sucess: true,
+        categories
+    });
+});
+export const getAdminProducts = TryCatch(async (req, res, next) => {
+    const products = await Product.find({});
+    return res.status(200).json({
+        sucess: true,
         products
     });
 });
