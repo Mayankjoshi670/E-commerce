@@ -19,7 +19,7 @@ export interface NewProductRequestBody {
 }
 
 export type ControllerType  = (
-    req : Request, 
+    req : Request<any>, 
     res:Response,
     next : NextFunction
 )=> Promise<Response<any, Record<string , any>>| undefined>;
