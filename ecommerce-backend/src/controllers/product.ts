@@ -5,6 +5,7 @@ import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/util-class.js";
 import { rm } from "fs";
 import {faker} from "@faker-js/faker"
+import { myCache } from "../app.js";
 
 // export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: Response, next: NextFunction) => {
     export const newProduct = TryCatch(async (req: Request<{}, {}, NewProductRequestBody>, res: any, next: NextFunction) => {
@@ -34,36 +35,65 @@ import {faker} from "@faker-js/faker"
 
 
 
-
+//  we will revaldate on New , update, delete and on New Order 
 export const getLatestProducts = TryCatch(async (req:Request, res: Response, next: NextFunction) => {
-    const { name, price, stock, category } = req.body;
-   const products = await Product.find({}).sort({createdAt:-1}).limit(5);
+   let products  ;
+   if(myCache.has("latest-product"))
+    products = JSON.parse(myCache.get('latest-product') as string );
+    //  if we already have get the products so we dont need to get them again form databse  we can get them directly them using cacheing 
+    // we also need to re-calidate when new product is created other wise it will reutn the old prodct list form local storage 
+   else {
+       products = await Product.find({}).sort({createdAt:-1}).limit(5);
+       myCache.set("latest-product" , JSON.stringify(products))
+       //   after getting products we can do caching ie we can store them in local storage 
+   }
     return res.status(200).json({
         success: true,
        products
     });
 });
-
+//  we will revaldate on New , update, delete and on New Order 
 export const getAllCategories = TryCatch(async (req , res , next)=>{
-    const categories = await Product.distinct("category") ; 
+  let categories  ;
+  if(myCache.has("categories")){
+    categories = JSON.parse(myCache.get("categories") as string );
+  }
+  else {
+      categories = await Product.distinct("category") ; 
+      myCache.set("categories" , JSON.stringify(categories))
+  }
     return res.status(200).json({
         sucess : true , 
        categories
     })
 })
 
-
+//  we will revaldate on New , update, delete and on New Order 
 export const getAdminProducts = TryCatch(async(req , res , next)=>{
-    const products = await Product.find({}) ; 
+    let products  ; 
+    if(myCache.has('all-products')){
+        products = JSON.parse(myCache.get('all-products') as string );
+    }
+    else {
+        products = await Product.find({}) ; 
+        myCache.set('all-products', JSON.stringify(products));
+    }
     return res.status(200).json({
         sucess : true , 
         products
     })
 })
 export const getSingleProduct = TryCatch (async (req , res:any , next) =>{
+   let product ; 
    const id = req.params.id
+   if(myCache.has(`product-${id}`)){
+    product = JSON.parse(myCache.get(`product-${id}`) as string )
+   }
+   else {
+        product = await Product.findById(id);
+    myCache.set( `product-${id}` , JSON.stringify(product))
+   }
     
-const product = await Product.findById(id);
     if(!product) return next (new ErrorHandler("Invalid Product id " , 404)) ;
     return res.status(200).json({
         sucess : true , 

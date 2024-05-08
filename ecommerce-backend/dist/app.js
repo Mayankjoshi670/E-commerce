@@ -3,10 +3,16 @@ const app = express();
 const port = 4000;
 import { connectDB } from "./utils/feature.js";
 import { errorMiddleware } from "./middlewares/error.js";
+// importing node-cache for caching 
+import NodeCache from 'node-cache';
 // impoerting routes 
 import userRoute from './routes/user.js';
 import productRoute from './routes/products.js';
 connectDB();
+// createing instance of nodecache 
+export const myCache = new NodeCache();
+// we can pass timer if we want after that time it destroys the instance
+// else it will be remain until and unless you dont relode website of server restarted
 // using routes 
 app.use(express.json());
 // we use express.josn middleware because we can't directly do object destructureing 
