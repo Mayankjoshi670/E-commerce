@@ -1,6 +1,12 @@
 import express from "express";
 const app = express();
-const port = 4000;
+import { config } from "dotenv";
+// call this config before connectdb() ; 
+config({
+    path: "./.env",
+});
+const port = process.env.PORT || 4000;
+console.log(process.env.PORT);
 import { connectDB } from "./utils/feature.js";
 import { errorMiddleware } from "./middlewares/error.js";
 // importing node-cache for caching 
@@ -8,6 +14,7 @@ import NodeCache from 'node-cache';
 // impoerting routes 
 import userRoute from './routes/user.js';
 import productRoute from './routes/products.js';
+import orderRoute from './routes/order.js';
 connectDB();
 // createing instance of nodecache 
 export const myCache = new NodeCache();
@@ -23,6 +30,7 @@ app.get("/", (req, res) => {
 // Using routes 
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/order", orderRoute);
 app.use("/uploads", express.static("uploads"));
 // middleware for catching errors 
 app.use(errorMiddleware);
