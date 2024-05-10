@@ -1,13 +1,17 @@
 import express from "express"
 const app =  express()
-import { config } from "dotenv";
+import { config } from "dotenv"
+import  morgan  from "morgan";
+import { connectDB } from "./utils/feature.js";
 // call this config before connectdb() ; 
 config({
-   path:"./.env",
+   path :"./.env",
 })
 const port  = process.env.PORT|| 4000 ;
+const mongoURI = process.env.MANGO_URI||"";
 console.log(process.env.PORT); 
-import { connectDB } from "./utils/feature.js";
+// connectDB(mongoURI) ;
+connectDB("mongodb://localhost:27017"); 
 import { errorMiddleware } from "./middlewares/error.js";
 
 // importing node-cache for caching 
@@ -17,7 +21,6 @@ import NodeCache  from 'node-cache';
 import userRoute from './routes/user.js';
 import productRoute from './routes/products.js';
 import orderRoute from './routes/order.js';
-connectDB() ; 
 
 
 // createing instance of nodecache 
@@ -32,6 +35,7 @@ export const myCache = new NodeCache();
 app.use(express.json());
 // we use express.josn middleware because we can't directly do object destructureing 
 //  and make sure it will be on top of all routes 
+app.use(morgan("dev")) ; 
 app.get("/" , (req, res)=>{
 res.send("api is working for / route  ")
 })
