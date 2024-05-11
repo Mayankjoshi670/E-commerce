@@ -27,3 +27,14 @@ export const invalidatesCache = async ({ product, order, admin }) => {
     if (admin) {
     }
 };
+export const reduceStock = async (orderItems) => {
+    for (let i = 0; i < orderItems.length; i++) {
+        const order = orderItems[i];
+        const product = await Product.findById(order.productId);
+        if (!product)
+            throw new Error("Product not found ");
+        product.stock -= order.quantity;
+        await product.save();
+        // product.save() will update into the database with new sock 
+    }
+};
