@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import { OrderItemType, invalidatesCacheProps } from '../types/types.js';
 import { Product } from '../models/product.js';
 import { myCache } from '../app.js';
+import { Order } from '../models/order.js';
 export const connectDB = (uri:string )=>{
 // mongoose.connect("mongodb://localhost:27017",{  // we dont need it to be static so we import it from .env 
 mongoose.connect(uri ,{
@@ -11,12 +12,12 @@ mongoose.connect(uri ,{
 .catch((e)=>console.log(e));
 };
 
-export const invalidatesCache = async({product , order , admin}:invalidatesCacheProps)=>{
+export const invalidatesCache = async({product , order , admin , userId , orderId}:invalidatesCacheProps)=>{
     if(product){
        const productKeys:string[] = [
         "latest-product",
-        "categories"
-        ,"all-products"
+        "categories",
+        "all-products"
     ];
     const products = await Product.find({}).select("_id");
     products.forEach(i=>{
@@ -26,13 +27,20 @@ export const invalidatesCache = async({product , order , admin}:invalidatesCache
     }
 
     if(order){
-
+        const ordersKeys: string[] = [
+            "all-orders",
+            `my-orders-${userId}`,
+            `order-${orderId}`,
+          ];// we are putting bydefault value as all-order  
+        myCache.del(ordersKeys);
     }
 
     if(admin){
 
     }
 }
+
+
 
 
 

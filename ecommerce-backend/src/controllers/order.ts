@@ -41,7 +41,7 @@ import { myCache } from "../app.js";
                 } )
                     // after placeing order we need to decrease product stocks to do so we will make a function in src>utils>features.ts a function names reduce product stock 
                   await   reduceStock(orderItems) ; 
-                  await invalidatesCache({product : true , order:true , admin:true });
+                  await invalidatesCache({product : true , order:true , admin:true , userId:user });
                 //    we will invalidate all data because when we are placeing an order 
                 //  product stock decreases 
                  return res.status(201).json({
@@ -93,3 +93,86 @@ import { myCache } from "../app.js";
         orders , 
     })
 })
+
+
+export const getSingleOrder = TryCatch(async (req , res , next:any)=>{
+   const {id} = req.params;
+    const key = `order-${id}`;
+    let order ;
+    if(myCache.has(key))order = JSON.parse(myCache.get(key )as string);
+    else {
+        order = await Order.findById(id).populate("user" , "name");
+        if(!order){
+            return next(new ErrorHandler("Order not found" , 404));
+        }
+        myCache.set(key , JSON.stringify(order))
+    }
+    return res.status(200).json({
+        sucess : true , 
+        order
+    })
+})
+
+
+export const processOrder = TryCatch(async (req, res, next:any) => {
+    const { id } = req.params;
+  
+    const order = await Order.findById(id);
+  
+    if (!order) return next(new ErrorHandler("Order Not Found", 404));
+  
+    switch (order.status) {
+      case "Processing":
+        order.status = "Shipped";
+        break;
+      case "Shipped":
+        order.status = "Delivered";
+        break;
+      default:
+        order.status = "Delivered";
+        break;
+    }
+  
+    await order.save();
+  
+    invalidatesCache({
+        product:false , 
+        order : true , 
+        admin :true  , 
+        userId : order.user , 
+        orderId:String(order._id)
+      });
+  
+    return res.status(200).json({
+      success: true,
+      message: "Order Processed Successfully",
+    });
+  });
+
+
+
+
+
+
+  export const deleteOrder = TryCatch(async (req, res, next:any) => {
+    const { id } = req.params;
+  
+    const order = await Order.findById(id);
+  
+    if (!order) return next(new ErrorHandler("Order Not Found", 404));
+  
+   await order.deleteOne() ; 
+
+    invalidatesCache({
+      product:false , 
+      order : true , 
+      admin :true  , 
+      userId : order.user , 
+      orderId:String(order._id)
+    });
+  
+    return res.status(200).json({
+      success: true,
+      message: "Order Deleted  Successfully",
+    });
+  });

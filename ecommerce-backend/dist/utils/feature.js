@@ -9,7 +9,7 @@ export const connectDB = (uri) => {
     }).then((c) => console.log(`DB is connected to ${c.connection.host}`))
         .catch((e) => console.log(e));
 };
-export const invalidatesCache = async ({ product, order, admin }) => {
+export const invalidatesCache = async ({ product, order, admin, userId, orderId }) => {
     if (product) {
         const productKeys = [
             "latest-product",
@@ -23,6 +23,12 @@ export const invalidatesCache = async ({ product, order, admin }) => {
         myCache.del(productKeys);
     }
     if (order) {
+        const ordersKeys = [
+            "all-orders",
+            `my-orders-${userId}`,
+            `order-${orderId}`,
+        ]; // we are putting bydefault value as all-order  
+        myCache.del(ordersKeys);
     }
     if (admin) {
     }
