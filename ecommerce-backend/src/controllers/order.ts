@@ -3,9 +3,10 @@ import { TryCatch } from "../middlewares/error.js";
 import { NewOrderRequestBody } from "../types/types.js";
 import { Order } from "../models/order.js";
 import { invalidatesCache, reduceStock } from "../utils/feature.js";
+import ErrorHandler from "../utils/util-class.js";
 
  export const newOrder = TryCatch(
-    async(req:Request<{},{},NewOrderRequestBody> , res , next) => {
+    async(req:Request<{},{},NewOrderRequestBody> , res , next:any) => {
         const {
             shippingInfo ,
             orderItems ,
@@ -16,6 +17,16 @@ import { invalidatesCache, reduceStock } from "../utils/feature.js";
             discount ,
             total
             } = req.body;
+
+
+            if(!shippingInfo||
+                !orderItems ||
+                !user ||
+                !subtotal ||
+                !tax ||
+                !total){
+                    return next(new ErrorHandler("please enter correct inforamtion" , 400)) ; 
+                }
             await Order.create(
                 {
                     shippingInfo ,
