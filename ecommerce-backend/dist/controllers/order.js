@@ -13,7 +13,7 @@ export const newOrder = TryCatch(async (req, res, next) => {
         !total) {
         return next(new ErrorHandler("please enter correct inforamtion", 400));
     }
-    await Order.create({
+    const order = await Order.create({
         shippingInfo,
         orderItems,
         user,
@@ -25,7 +25,13 @@ export const newOrder = TryCatch(async (req, res, next) => {
     });
     // after placeing order we need to decrease product stocks to do so we will make a function in src>utils>features.ts a function names reduce product stock 
     await reduceStock(orderItems);
-    await invalidatesCache({ product: true, order: true, admin: true, userId: user });
+    await invalidatesCache({
+        product: true,
+        order: true,
+        admin: true,
+        userId: user,
+        productId: order.orderItems.map((i) => String(i.productId)),
+    });
     //    we will invalidate all data because when we are placeing an order 
     //  product stock decreases 
     return res.status(201).json({

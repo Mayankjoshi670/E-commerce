@@ -12,20 +12,31 @@ mongoose.connect(uri ,{
 .catch((e)=>console.log(e));
 };
 
-export const invalidatesCache = async({product , order , admin , userId , orderId}:invalidatesCacheProps)=>{
+export const invalidatesCache = async({
+    product ,
+     order ,
+      admin ,
+       userId ,
+        orderId,
+        productId
+    }:invalidatesCacheProps)=>{
     if(product){
        const productKeys:string[] = [
         "latest-product",
         "categories",
-        "all-products"
+        "all-products" , 
+        
     ];
-    const products = await Product.find({}).select("_id");
-    products.forEach(i=>{
-        productKeys.push(`product-${i._id}`);
-    })
+    if (typeof productId === "string") productKeys.push(`product-${productId}`);
+
+    if (typeof productId === "object")
+        {
+            productId.forEach((i) => productKeys.push(`product-${i}`));
+            // console.log("WTF");
+        }
+
     myCache.del(productKeys);
     }
-
     if(order){
         const ordersKeys: string[] = [
             "all-orders",

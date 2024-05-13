@@ -9,17 +9,19 @@ export const connectDB = (uri) => {
     }).then((c) => console.log(`DB is connected to ${c.connection.host}`))
         .catch((e) => console.log(e));
 };
-export const invalidatesCache = async ({ product, order, admin, userId, orderId }) => {
+export const invalidatesCache = async ({ product, order, admin, userId, orderId, productId }) => {
     if (product) {
         const productKeys = [
             "latest-product",
             "categories",
-            "all-products"
+            "all-products",
         ];
-        const products = await Product.find({}).select("_id");
-        products.forEach(i => {
-            productKeys.push(`product-${i._id}`);
-        });
+        if (typeof productId === "string")
+            productKeys.push(`product-${productId}`);
+        if (typeof productId === "object") {
+            productId.forEach((i) => productKeys.push(`product-${i}`));
+            // console.log("WTF");
+        }
         myCache.del(productKeys);
     }
     if (order) {
