@@ -10,7 +10,7 @@ export const adminOnly = TryCatch(async (req, res, next) => {
     if (!user)
         return next(new ErrorHandler("No user found", 401));
     if (user.role !== "admin")
-        return next(new ErrorHandler("Admin only", 401));
+        return next(new ErrorHandler("Admin only", 403));
     next();
 });
 // The difference between query and params is that we use query by using '?' and we use params directly
