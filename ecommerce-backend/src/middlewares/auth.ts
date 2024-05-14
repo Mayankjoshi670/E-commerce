@@ -7,6 +7,7 @@ import { TryCatch } from "./error.js";
 
 // middleware to make sure only admin is allowed to do certain actions like getting all users, deleting users, and more
 export const adminOnly = TryCatch(async (req, res, next:any) => {
+    console.log("inside admin only")
     const { id } = req.query;
     if (!id) return next(new ErrorHandler("Please log in", 401));
     const user = await User.findById(id);

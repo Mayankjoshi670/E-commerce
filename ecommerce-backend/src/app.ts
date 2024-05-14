@@ -23,8 +23,7 @@ import productRoute from './routes/products.js';
 import orderRoute from './routes/order.js';
 import paymentRoute from './routes/payment.js'
 
-
-import dashbordRoute from './routes/stats.js'
+import dasboardRoute from './routes/stats.js' 
 // createing instance of nodecache 
 
 export const myCache = new NodeCache();
@@ -50,8 +49,8 @@ app.use("/api/v1/product", productRoute);
 app.use("/api/v1/order", orderRoute);
 
 app.use("/api/v1/payment", paymentRoute);
-app.use("api/v1/dashboard" , dashbordRoute) ; 
 
+app.use("/api/v1/dashboard" ,dasboardRoute )
 
 app.use("/uploads" ,express.static("uploads"));
 
