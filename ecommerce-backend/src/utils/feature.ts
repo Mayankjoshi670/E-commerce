@@ -65,3 +65,11 @@ export const reduceStock = async (orderItems:OrderItemType[])=>{
         // product.save() will update into the database with new sock 
     }
 }
+
+
+
+export const calculatePercentage =(thisMonth:number , lastMonth:number)=>{
+ if(lastMonth=== 0 ) return thisMonth*100 ; 
+    const precent = ((thisMonth-lastMonth )/lastMonth)*100;
+ return  Number(precent.toFixed(0)) ; 
+}
