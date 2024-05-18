@@ -97,6 +97,7 @@ export const getDashboardStats = TryCatch(async(req , res , next)=>{
             userCount,
             allOrders,
             lastSixMonthOrders,
+            categories 
          ] = await Promise.all([
             thisMonthProductsPromise ,
              thisMonthUsersPromise, 
@@ -108,6 +109,7 @@ export const getDashboardStats = TryCatch(async(req , res , next)=>{
              User.countDocuments() , 
              Order.find({}).select("total") , 
              lastSixMonthOrdersPromise, 
+             Product.distinct("category")
             ])
           
 
@@ -152,7 +154,18 @@ export const getDashboardStats = TryCatch(async(req , res , next)=>{
                     orderMonthRevenue[6-monthDiff -1 ]+= order.total
                 }
             })
-            stats = {
+            // map retunrs a new array so we dont need to use for each loop and then store them into new array 
+  const categoriesCountPromise=categories.map((category)=>Product.countDocuments({category} ))
+  const categoriesCount = await Promise.all(categoriesCountPromise)    
+  const categoryCount = [];
+  categories.forEach((category , i )=>{
+    categoryCount.push({
+     [category]:categoriesCount[i]  
+    })
+  })
+  stats = {
+    categoriesCount,
+                categories,
                  changePercent, 
                  count , 
                  chart:{
@@ -200,3 +213,8 @@ export const getLineCharts = TryCatch(async(req , res , next)=>{
         stats, 
     })
 })
+
+
+
+
+

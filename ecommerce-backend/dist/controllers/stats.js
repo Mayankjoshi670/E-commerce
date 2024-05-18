@@ -69,7 +69,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                 $lte: lastMonth.end,
             }
         });
-        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, productCount, userCount, allOrders, lastSixMonthOrders,] = await Promise.all([
+        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, productCount, userCount, allOrders, lastSixMonthOrders, categories] = await Promise.all([
             thisMonthProductsPromise,
             thisMonthUsersPromise,
             thisMonthOrdersPromise,
@@ -80,6 +80,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
             User.countDocuments(),
             Order.find({}).select("total"),
             lastSixMonthOrdersPromise,
+            Product.distinct("category")
         ]);
         const thisMonthRevenue = thisMonthOrders.reduce((total, order) => total + (order.total || 0), 0);
         const lastMonthRevenue = lastMonthOrders.reduce((total, order) => total + (order.total || 0), 0);
@@ -106,7 +107,18 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                 orderMonthRevenue[6 - monthDiff - 1] += order.total;
             }
         });
+        // map retunrs a new array so we dont need to use for each loop and then store them into new array 
+        const categoriesCountPromise = categories.map((category) => Product.countDocuments({ category }));
+        const categoriesCount = await Promise.all(categoriesCountPromise);
+        const categoryCount = [];
+        categories.forEach((category, i) => {
+            categoryCount.push({
+                [category]: categoriesCount[i]
+            });
+        });
         stats = {
+            categoriesCount,
+            categories,
             changePercent,
             count,
             chart: {
