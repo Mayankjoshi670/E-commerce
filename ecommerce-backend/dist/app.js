@@ -9,6 +9,7 @@ config({
 });
 const port = process.env.PORT || 4000;
 const mongoURI = process.env.MANGO_URI || "";
+const srripeKey = process.env.Stripe_Key || "";
 console.log(process.env.PORT);
 // connectDB(mongoURI) ;
 connectDB("mongodb://localhost:27017");
@@ -21,7 +22,9 @@ import productRoute from './routes/products.js';
 import orderRoute from './routes/order.js';
 import paymentRoute from './routes/payment.js';
 import dasboardRoute from './routes/stats.js';
+import Stripe from "stripe";
 // createing instance of nodecache 
+export const stripe = new Stripe(srripeKey);
 export const myCache = new NodeCache();
 // we can pass timer if we want after that time it destroys the instance
 // else it will be remain until and unless you dont relode website of server restarted
