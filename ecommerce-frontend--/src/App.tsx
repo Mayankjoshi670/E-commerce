@@ -1,7 +1,7 @@
 // import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy , Suspense } from 'react';
-import Loader from './components/loading'
+import Loader from './components/loader'
 import Headers from './components/headers';
 // import Home from './pages/home';
 // import Cart from './pages/cart';
