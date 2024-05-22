@@ -2,7 +2,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { lazy , Suspense } from 'react';
 import Loader from './components/loader'
-import Headers from './components/headers';
+import Headers from './components/header';
 // import Home from './pages/home';
 // import Cart from './pages/cart';
 // import Search from './pages/search';

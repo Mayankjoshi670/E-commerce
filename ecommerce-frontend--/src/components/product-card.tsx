@@ -1,29 +1,41 @@
 import { FaPlus } from "react-icons/fa";
+import { server } from "../redux/store";
+import { CartItem } from "../types/types";
 
-type ProductsProp = {
-    productId: string;
-    photo: string;
-    name: string;
-    price: number;
-    stock: number;
-    handler: () => void;
-  };
-  const server = "dsdsd"
-  const ProductCard = ({ productId, name, photo, price, stock  , handler}: ProductsProp) => {
-    return (
-      <div className="product-card">
-        {/* <img src={`${server}/${photo}`} alt={name} /> */}
-       <img src="https://m.media-amazon.com/images/I/61RJn0ofUsL._AC_SX342_.jpg" alt="MacBook" />
-        <p>{name}</p>
-        <span>₹{price}</span>
-        <div>
-            <button onCanPlay={()=>handler()}>
-                <FaPlus/>
-                </button>
-        </div>
+type ProductsProps = {
+  productId: string;
+  photo: string;
+  name: string;
+  price: number;
+  stock: number;
+  handler: (cartItem: CartItem) => string | undefined;
+};
+
+const ProductCard = ({
+  productId,
+  price,
+  name,
+  photo,
+  stock,
+  handler,
+}: ProductsProps) => {
+  return (
+    <div className="product-card">
+      <img src={`${server}/${photo}`} alt={name} />
+      <p>{name}</p>
+      <span>₹{price}</span>
+
+      <div>
+        <button
+          onClick={() =>
+            handler({ productId, price, name, photo, stock, quantity: 1 })
+          }
+        >
+          <FaPlus />
+        </button>
       </div>
-    );
-  };
-  
-  export default ProductCard;
-  
+    </div>
+  );
+};
+
+export default ProductCard;
