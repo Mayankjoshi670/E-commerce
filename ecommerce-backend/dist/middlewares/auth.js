@@ -1,17 +1,15 @@
 import { User } from "../models/user.js";
-import ErrorHandler from "../utils/util-class.js";
+import ErrorHandler from "../utils/utility-class.js";
 import { TryCatch } from "./error.js";
-// middleware to make sure only admin is allowed to do certain actions like getting all users, deleting users, and more
+// Middleware to make sure only admin is allowed
 export const adminOnly = TryCatch(async (req, res, next) => {
-    console.log("inside admin only");
     const { id } = req.query;
     if (!id)
-        return next(new ErrorHandler("Please log in", 401));
+        return next(new ErrorHandler("Saale Login Kr phle", 401));
     const user = await User.findById(id);
     if (!user)
-        return next(new ErrorHandler("No user found", 401));
+        return next(new ErrorHandler("Saale Fake ID Deta Hai", 401));
     if (user.role !== "admin")
-        return next(new ErrorHandler("Admin only", 403));
+        return next(new ErrorHandler("Saale Aukat Nhi Hai Teri", 403));
     next();
 });
-// The difference between query and params is that we use query by using '?' and we use params directly

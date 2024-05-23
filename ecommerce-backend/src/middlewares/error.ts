@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import ErrorHandler from "../utils/util-class.js";
+import ErrorHandler from "../utils/utility-class.js";
 import { ControllerType } from "../types/types.js";
+
 export const errorMiddleware = (
   err: ErrorHandler,
   req: Request,
@@ -9,16 +10,15 @@ export const errorMiddleware = (
 ) => {
   err.message ||= "Internal Server Error";
   err.statusCode ||= 500;
-  if (err.name === "CastError") 
-    {
-      // console.log("inside cast error");
-      err.message = "Invalid ID";
-    }
+
+  if (err.name === "CastError") err.message = "Invalid ID";
+
   return res.status(err.statusCode).json({
     success: false,
     message: err.message,
   });
 };
+
 export const TryCatch =
   (func: ControllerType) =>
   (req: Request, res: Response, next: NextFunction) => {

@@ -7,8 +7,7 @@ const storage = multer.diskStorage({
     filename(req, file, callback) {
         const id = uuid();
         const extName = file.originalname.split(".").pop();
-        const fileName = `${id}.${extName}`;
-        callback(null, fileName);
-    }
+        callback(null, `${id}.${extName}`);
+    },
 });
 export const singleUpload = multer({ storage }).single("photo");

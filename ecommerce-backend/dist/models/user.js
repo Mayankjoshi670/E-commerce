@@ -3,22 +3,21 @@ import validator from "validator";
 const schema = new mongoose.Schema({
     _id: {
         type: String,
-        requied: [true, "Please enter id "],
+        required: [true, "Please enter ID"],
     },
     name: {
         type: String,
-        requied: [true, "please enter name "],
+        required: [true, "Please enter Name"],
     },
     email: {
         type: String,
-        unique: [true, "email already exists"],
-        requied: [true, "please enter email "],
-        //  to validate email either we can make our own function or we can use liberies 
-        validator: validator.default.isEmail
+        unique: [true, "Email already Exist"],
+        required: [true, "Please enter Name"],
+        validate: validator.default.isEmail,
     },
     photo: {
         type: String,
-        requied: [true, "please add Photo"]
+        required: [true, "Please add Photo"],
     },
     role: {
         type: String,
@@ -27,23 +26,22 @@ const schema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enums: ["male", "female"],
-        requied: [true, "please enter your  gender"]
+        enum: ["male", "female"],
+        required: [true, "Please enter Gender"],
     },
     dob: {
         type: Date,
-        requied: [true, "please enter your  date of birth"]
-    }
+        required: [true, "Please enter Date of birth"],
+    },
 }, {
     timestamps: true,
 });
-//  we create a virtual schema 
-//  virtual schema is a schema which is not stored into the databse they are computed at  time of access 
 schema.virtual("age").get(function () {
     const today = new Date();
     const dob = this.dob;
     let age = today.getFullYear() - dob.getFullYear();
-    if (today.getMonth() < dob.getMonth() || today.getMonth() == dob.getMonth() && today.getDate() < dob.getDate()) {
+    if (today.getMonth() < dob.getMonth() ||
+        (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
         age--;
     }
     return age;

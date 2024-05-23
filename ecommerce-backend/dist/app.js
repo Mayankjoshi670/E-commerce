@@ -1,50 +1,41 @@
 import express from "express";
-const app = express();
+import { connectDB } from "./utils/features.js";
+import { errorMiddleware } from "./middlewares/error.js";
+import NodeCache from "node-cache";
 import { config } from "dotenv";
 import morgan from "morgan";
-import { connectDB } from "./utils/feature.js";
-// call this config before connectdb() ; 
+import Stripe from "stripe";
+import cors from "cors";
+// Importing Routes
+import userRoute from "./routes/user.js";
+import productRoute from "./routes/products.js";
+import orderRoute from "./routes/order.js";
+import paymentRoute from "./routes/payment.js";
+import dashboardRoute from "./routes/stats.js";
 config({
     path: "./.env",
 });
 const port = process.env.PORT || 4000;
-const mongoURI = process.env.MANGO_URI || "";
-const srripeKey = process.env.Stripe_Key || "";
-console.log(process.env.PORT);
-// connectDB(mongoURI) ;
-connectDB("mongodb://localhost:27017");
-import { errorMiddleware } from "./middlewares/error.js";
-// importing node-cache for caching 
-import NodeCache from 'node-cache';
-// impoerting routes 
-import userRoute from './routes/user.js';
-import productRoute from './routes/products.js';
-import orderRoute from './routes/order.js';
-import paymentRoute from './routes/payment.js';
-import dasboardRoute from './routes/stats.js';
-import Stripe from "stripe";
-// createing instance of nodecache 
-export const stripe = new Stripe(srripeKey);
+const mongoURI = process.env.MONGO_URI || "";
+const stripeKey = process.env.STRIPE_KEY || "";
+connectDB(mongoURI);
+export const stripe = new Stripe(stripeKey);
 export const myCache = new NodeCache();
-// we can pass timer if we want after that time it destroys the instance
-// else it will be remain until and unless you dont relode website of server restarted
-// using routes 
+const app = express();
 app.use(express.json());
-// we use express.josn middleware because we can't directly do object destructureing 
-//  and make sure it will be on top of all routes 
 app.use(morgan("dev"));
+app.use(cors());
 app.get("/", (req, res) => {
-    res.send("api is working for / route  ");
+    res.send("API Working with /api/v1");
 });
-// Using routes 
+// Using Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/payment", paymentRoute);
-app.use("/api/v1/dashboard", dasboardRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 app.use("/uploads", express.static("uploads"));
-// middleware for catching errors 
 app.use(errorMiddleware);
 app.listen(port, () => {
-    console.log(`server is running on  http://localhost:${port} `);
+    console.log(`Express is working on http://localhost:${port}`);
 });
