@@ -35,7 +35,7 @@ const Home = () => {
         {isLoading ? (
           <Skeleton width="80vw" />
         ) : (
-          data?.products.map((i)  => (
+          data?.products.map((i) => (
             <ProductCard
               key={i._id}
               productId={i._id}
