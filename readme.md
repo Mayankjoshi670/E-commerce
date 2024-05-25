@@ -65,4 +65,8 @@ _npm run dev_
 ## Card NO 
 **while doing payment if it shows an error  use this card no**
 
+<<<<<<< HEAD
 _4000003560000297_ || _4000003560000123_
+=======
+_4000003560000297_ || _4000003560000123_
+>>>>>>> 345e8500310453e9fa4ddf16aeb2a29fbd2a5363
